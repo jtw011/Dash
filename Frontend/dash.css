@@ -1,4 +1,30 @@
-* {
-    font-family: 'Times New Roman', sans-serif;
-    Color: #000000;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #000000;
+    color: #fffdfd;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    display: flex;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+} 
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
