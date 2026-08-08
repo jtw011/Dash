@@ -37,33 +37,39 @@ p {
 
 .calendar {
     text-align: center;
-    grid-column: span 2;
-    grid-row: span 3;
+    grid-column: span 4;
+    grid-row: span 2;
 }
 
 .weather {
-    grid-column: span 1;
+    grid-column: span 4;
+    text-align: center;
 }
 
 .clock {
-    grid-column: span 1;
+    grid-column: span 4;
+    text-align: center;
 }
 
 .todo {
     grid-column: span 1;
+    text-align: center;
 }
 
 .music {
     grid-column: span 1;
+    text-align: center;
 }
 
 .github {
     grid-column: span 1;
+    text-align: center;
 }
 
 .system-stats {
     grid-column: span 1;
     grid-row: span 1;
+    text-align: center;
 }
 
 .assistant {
