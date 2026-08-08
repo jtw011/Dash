@@ -22,9 +22,52 @@ p {
 } 
 
 .dashboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 160px;
+    gap: 16px;
+    padding: 20px;
+}
+
+.card {
+    background: #1e1e1e;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.calendar {
+    text-align: center;
+    grid-column: span 2;
+    grid-row: span 3;
+}
+
+.weather {
+    grid-column: span 1;
+}
+
+.clock {
+    grid-column: span 1;
+}
+
+.todo {
+    grid-column: span 1;
+}
+
+.music {
+    grid-column: span 1;
+}
+
+.github {
+    grid-column: span 1;
+}
+
+.system-stats {
+    grid-column: span 1;
+    grid-row: span 1;
+}
+
+.assistant {
+    text-align: center;
+    grid-column: span 4;
+    grid-row: span 1;
 }
