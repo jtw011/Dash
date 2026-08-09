@@ -9,14 +9,23 @@
 </head>
 <body>
     <h1><b>Hi, I'm Dash - Your AI Personal Dashboard</b></h1>
-    <p>Dash is your all-in-one personal dashboard powered by AI. Here you can manage your tasks, track your goals, and get insights to improve your productivity.</p>
-
-
 <div class="dashboard"> 
+
+        <section class="card clock">
+        <h2>Date and Time</h2>
+        <!-- Clock content -->    
+        <div id="date"></div>
+        <div id="time"></div>
+    </section>
+
     <section class="card calendar">
         <h2>Calendar</h2>
         <!-- Calendar content -->
-        <p>Upcoming events: Work at 9:00 AM</p>
+         <h2>This Week</h2>
+        <button id="authorize_button" onclick="handleAuthClick()">
+        Connect Google Calendar
+        </button>
+        <div id="calendar"></div>
     </section>
 
     <section class="card weather">
@@ -25,16 +34,10 @@
         <p>Weather: 98 degrees and sunny</p>
     </section>
 
-    <section class="card clock">
-        <h2>Date and Time</h2>
-        <!-- Clock content -->
-        <p>Date and Time: Monday, August 7th 2026 6:53 PM</p>
-    </section>
-
     <section class="card todo">
         <h2>To-Do</h2>
         <!-- Todo content -->
-        <p>Tasks: Play Guitar</p>
+         <div id="tasks"></div>
     </section>
 
     <section class="card music">
@@ -63,6 +66,19 @@
 
 
 </div>
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client"></script>
+
+<script src="script.js"></script>
+
+<script>
+    gapiLoaded();
+    gisLoaded();
+</script>
 </body>
-<script src="dash.js"></script>
+<script src="clock.js"></script>
+<script src=""></script>
+<script src=""></script>
+<script src=""></script>
+<script src=""></script>
 </html>

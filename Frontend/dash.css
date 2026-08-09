@@ -1,79 +1,154 @@
+:root {
+    --background: #111111;
+    --card: #1c1c1c;
+    --text: #ffffff;
+    --muted: #999999;
+    --accent: #6c63ff;
+
+    --radius: 16px;
+    --gap: 16px;
+    --padding: 20px;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #000000;
-    color: #fffdfd;
+    background: var(--background);
+    color: var(--text);
     margin: 0;
     padding: 0;
 }
 
 h1 {
-    display: flex;
     font-size: 2.5rem;
     font-weight: bold;
-    margin-bottom: 1rem;
-    justify-content: center;
-    align-items: center;
+    margin: 0 0 1rem;
+    text-align: center;
 }
 
 p {
     font-size: 1.2rem;
-    margin-bottom: 1rem;
-    text-align: center;
-} 
+    color: var(--muted);
+    margin: 0 0 1rem;
+}
 
 .dashboard {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: 160px;
-    gap: 16px;
-    padding: 20px;
+    gap: var(--gap);
+    padding: var(--padding);
 }
 
 .card {
-    background: #1e1e1e;
-    border-radius: 16px;
-    padding: 20px;
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: var(--padding);
+    box-sizing: border-box;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.calendar {
-    text-align: center;
-    grid-column: span 4;
-    grid-row: span 2;
-}
-
-.weather {
-    grid-column: span 4;
-    text-align: center;
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .clock {
-    grid-column: span 4;
+    grid-column: span 2;
     text-align: center;
 }
 
-.todo {
-    grid-column: span 1;
+.weather {
+    grid-column: span 2;
     text-align: center;
 }
 
-.music {
-    grid-column: span 1;
+.calendar {
+    grid-column: span 2;
+    grid-row: span 2;
     text-align: center;
 }
 
-.github {
-    grid-column: span 1;
-    text-align: center;
+.calendar h2 {
+    margin-top: 0;
 }
 
+.calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    width: 100%;
+}
+
+.calendar-day {
+    min-width: 0;
+    text-align: center;
+    padding: 10px 4px;
+    border-radius: 10px;
+}
+
+.calendar-day.today {
+    background: var(--accent);
+}
+
+.day-name {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.day-number {
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.calendar-day.today .day-number {
+    color: var(--text);
+}
+
+.event {
+    background: var(--background);
+    border-radius: 8px;
+    padding: 8px 5px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    overflow: hidden;
+}
+
+.event-time {
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.event-title {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+.todo,
+.music,
+.github,
 .system-stats {
     grid-column: span 1;
-    grid-row: span 1;
+    grid-row: span 2;
     text-align: center;
 }
 
 .assistant {
+    grid-column: span 2;
     text-align: center;
-    grid-column: span 4;
-    grid-row: span 1;
+}
+
+.accent {
+    color: var(--accent);
+}
+
+.task {
+    text-align: left;
+    padding: 8px;
+    margin-bottom: 6px;
+    background: var(--background);
+    border-radius: 8px;
+    font-size: 0.95rem;
 }
