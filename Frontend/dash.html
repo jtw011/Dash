@@ -11,15 +11,18 @@
     <h1><b>Hi, I'm Dash - Your AI Personal Dashboard</b></h1>
 <div class="dashboard"> 
 
-        <section class="card clock">
-        <h2>Date and Time</h2>
-        <!-- Clock content -->    
-        <div id="date"></div>
+<section class="card clock-weather">
+
+    <div class="clock-content">
         <div id="time"></div>
-    </section>
+        <div id="date"></div>
+    </div>
+
+    <div class="weather-content" id="weather"></div>
+
+</section>
 
     <section class="card calendar">
-        <h2>Calendar</h2>
         <!-- Calendar content -->
          <h2>This Week</h2>
         <button id="authorize_button" onclick="handleAuthClick()">
@@ -28,11 +31,6 @@
         <div id="calendar"></div>
     </section>
 
-    <section class="card weather">
-        <h2>Weather</h2>
-        <!-- Weather content -->
-        <p>Weather: 98 degrees and sunny</p>
-    </section>
 
     <section class="card todo">
         <h2>To-Do</h2>
@@ -48,7 +46,7 @@
 
     <section class="card github">
         <h2>github</h2>
-        <p>Github: You have 3 new notifications</p>
+        <p>Github: You have 3 new notices</p>
     </section>
 
     <section class="card system-stats">
