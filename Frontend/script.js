@@ -345,14 +345,14 @@ function displayTasks(tasks) {
 // ====================
 
 async function getWeather() {
-    const latitude = 40.76;
+    const latitude = 40.5219;
     const longitude = -111.89;
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto`;
 
     const response = await fetch(url);
     const data = await response.json();
-
+    
     const temperature = data.current.temperature_2m;
 
     const high = data.daily.temperature_2m_max[0];
@@ -397,5 +397,50 @@ document.getElementById("weather").innerHTML = `
 }
 
 getWeather();
+
+// ====================
+// System Stats
+// ====================
+
+async function loadSystemStats() {
+    try {
+        const response = await fetch("http://localhost:3000/api/system-stats");
+
+        if (!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+        }
+
+        const stats = await response.json();
+
+        console.log("System stats:", stats);
+
+        document.getElementById("system-stats").innerHTML = `
+            <div class="stat">
+                <span>CPU</span>
+                <strong>${stats.cpu}%</strong>
+            </div>
+
+            <div class="stat">
+                <span>Memory</span>
+                <strong>${stats.memory}%</strong>
+            </div>
+
+            <div class="stat">
+                <span>Storage</span>
+                <strong>${stats.storage}%</strong>
+            </div>
+        `;
+
+    } catch (error) {
+        console.error("System stats error:", error);
+
+        document.getElementById("system-stats").innerHTML = `
+            <p>System stats unavailable</p>
+        `;
+    }
+}
+
+loadSystemStats();
+setInterval(loadSystemStats, 5000); // Update every minute
 
 console.log("Dash Calendar JS loaded");
