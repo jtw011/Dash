@@ -276,3 +276,53 @@ p {
     border-radius: 999px;
     transition: width 0.5s ease;
 }
+.github-layout {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.github-stat {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.github-stat strong {
+    display: block;
+    font-size: 2.5rem;
+}
+
+.github-stat span {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.github-repos h3 {
+    margin: 0 0 10px 0;
+}
+
+.github-repo {
+    margin-bottom: 12px;
+}
+
+.github-repo strong {
+    display: block;
+    font-size: 0.9rem;
+}
+
+.github-repo span {
+    display: block;
+    font-size: 0.78rem;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.github-repo small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.7rem;
+    margin-top: 2px;
+}
