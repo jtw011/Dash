@@ -61,13 +61,15 @@ async function handleAuthClick() {
 
         console.log("Google authentication successful");
 
-        await loadCalendar();
+document.getElementById("google-login").style.display = "none";
 
-        console.log("Loading Google Tasks...");
+await loadCalendar();
 
-        await loadTaskLists();
+console.log("Loading Google Tasks...");
 
-        console.log("Google Tasks finished");
+await loadTaskLists();
+
+console.log("Google Tasks finished");
     };
 
     tokenClient.requestAccessToken({

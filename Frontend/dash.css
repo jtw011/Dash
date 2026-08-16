@@ -109,7 +109,7 @@ p {
 
 .calendar {
     grid-column: span 6;
-    grid-row: span 3;
+    grid-row: span 2;
     text-align: center;
     overflow: hidden;
     display: flex;
