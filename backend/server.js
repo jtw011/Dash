@@ -16,11 +16,12 @@ const server = http.createServer(async (req, res) => {
             const memory = await si.mem();
             const disk = await si.fsSize();
 
-            const stats = {
-                cpu: Math.round(cpu.currentLoad),
-                memory: Math.round((memory.used / memory.total) * 100),
-                storage: Math.round(disk[0].use)
-            };
+    const stats = {
+        cpu: Math.round(cpu.currentLoad),
+        memory: Math.round((memory.used / memory.total) * 100),
+        storage: Math.round(disk[0].used / 1024 / 1024 / 1024),
+        storageTotal: Math.round(disk[0].size / 1024 / 1024 / 1024)
+};
 
             res.writeHead(200, {
                 "Content-Type": "application/json"

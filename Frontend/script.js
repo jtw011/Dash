@@ -416,19 +416,37 @@ async function loadSystemStats() {
 
         document.getElementById("system-stats").innerHTML = `
             <div class="stat">
-                <span>CPU</span>
-                <strong>${stats.cpu}%</strong>
+                <div class="stat-header">
+                    <span>CPU</span>
+                    <strong>${stats.cpu}%</strong>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: ${stats.cpu}%"></div>
+                </div>
             </div>
 
             <div class="stat">
-                <span>Memory</span>
-                <strong>${stats.memory}%</strong>
+                <div class="stat-header">
+                    <span>Memory</span>
+                    <strong>${stats.memory}%</strong>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: ${stats.memory}%"></div>
+                </div>
             </div>
 
             <div class="stat">
-                <span>Storage</span>
-                <strong>${stats.storage}%</strong>
-            </div>
+    <div class="stat-header">
+        <span>Storage</span>
+        <strong>${stats.storage} GB / ${stats.storageTotal} GB</strong>
+    </div>
+    <div class="stat-bar">
+        <div 
+            class="stat-fill" 
+            style="width: ${(stats.storage / stats.storageTotal) * 100}%">
+        </div>
+    </div>
+</div>
         `;
 
     } catch (error) {
@@ -441,6 +459,7 @@ async function loadSystemStats() {
 }
 
 loadSystemStats();
+
 setInterval(loadSystemStats, 5000); // Update every minute
 
 console.log("Dash Calendar JS loaded");

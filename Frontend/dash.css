@@ -2,8 +2,8 @@
     --background: #111111;
     --card: #1c1c1c;
     --text: #ffffff;
-    --muted: #999999;
-    --accent: #6c63ff;
+    --muted: #d3d1d1;
+    --accent: #ce0000;
 
     --radius: 16px;
     --gap: 16px;
@@ -219,4 +219,60 @@ p {
     background: var(--background);
     border-radius: 8px;
     font-size: 0.95rem;
+}
+
+/* ====================
+   System Stats
+   ==================== */
+
+.system-stats {
+    display: flex;
+    flex-direction: column;
+}
+
+.system-stats h2 {
+    margin-bottom: 20px;
+}
+
+#system-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.stat {
+    width: 100%;
+}
+
+.stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.stat-header span {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.stat-header strong {
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.stat-bar {
+    width: 100%;
+    height: 8px;
+    background: #2a2a2a;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.stat-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.5s ease;
 }
