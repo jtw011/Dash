@@ -17,6 +17,7 @@ const SCOPES = [
 let tokenClient;
 let gapiInited = false;
 let gisInited = false;
+let currentWeekOffset = 0;
 
 
 // ====================
@@ -92,7 +93,7 @@ async function loadCalendar() {
 
         const difference = day === 0 ? -6 : 1 - day;
 
-        monday.setDate(monday.getDate() + difference);
+        monday.setDate(monday.getDate() + difference + currentWeekOffset * 7);
         monday.setHours(0, 0, 0, 0);
 
         // Find Sunday
@@ -120,6 +121,59 @@ async function loadCalendar() {
     }
 }
 
+function updateCalendarTitle(monday) {
+
+    const title =
+        document.getElementById(
+            "calendar-title"
+        );
+
+    if (!title) return;
+
+    if (currentWeekOffset === 0) {
+
+        title.textContent = "This Week";
+
+        return;
+
+    }
+
+    const sunday = new Date(monday);
+
+    sunday.setDate(
+        monday.getDate() + 6
+    );
+
+    const startMonth =
+        monday.toLocaleDateString(
+            undefined,
+            {
+                month: "short"
+            }
+        );
+
+    const endMonth =
+        sunday.toLocaleDateString(
+            undefined,
+            {
+                month: "short"
+            }
+        );
+
+    if (startMonth === endMonth) {
+
+        title.textContent =
+            `${startMonth} ${monday.getDate()} – ${sunday.getDate()}`;
+
+    } else {
+
+        title.textContent =
+            `${startMonth} ${monday.getDate()} – ` +
+            `${endMonth} ${sunday.getDate()}`;
+
+    }
+
+}
 
 function displayCalendar(events, monday) {
     const calendar = document.getElementById("calendar");
@@ -242,6 +296,48 @@ function displayCalendar(events, monday) {
     calendar.appendChild(week);
 }
 
+const prevWeekButton =
+    document.getElementById(
+        "prev-week"
+    );
+
+const nextWeekButton =
+    document.getElementById(
+        "next-week"
+    );
+
+
+if (prevWeekButton) {
+    prevWeekButton.addEventListener(
+        "click",
+        () => {
+            currentWeekOffset--;
+            loadCalendar();
+        }
+    );
+}
+
+if (nextWeekButton) {
+    nextWeekButton.addEventListener(
+        "click",
+        () => {
+            currentWeekOffset++;
+            loadCalendar();
+        }
+    );
+}
+
+const todayButton =
+    document.getElementById("today-button");
+if (todayButton) {
+    todayButton.addEventListener(
+        "click",
+        () => {
+            currentWeekOffset = 0;
+            loadCalendar();
+        }
+    );
+}
 
 // ====================
 // Google Tasks
@@ -1368,7 +1464,6 @@ setInterval(
     loadSpotifyNowPlaying,
     5000
 );
-
 
 console.log(
     "Dash Calendar JS loaded"

@@ -23,11 +23,25 @@
 </section>
 
     <section class="card calendar">
-        <!-- Calendar content -->
-         <h2>This Week</h2>
-        <button id="google-login" onclick="handleAuthClick()">Connect Google</button>
-        <div id="calendar"></div>
-    </section>
+    <div class="calendar-header">
+        <button id="prev-week" class="week-button">
+            ←
+        </button>
+        <h2 id="calendar-title">This Week</h2>
+        <button id="next-week" class="week-button">
+            →
+        </button>
+
+        <button id="today-button">
+        Today
+        </button>
+    </div>
+    <button id="google-login" onclick="handleAuthClick()">
+        Connect Google
+    </button>
+    <div id="calendar"></div>
+
+</section>
 
 
     <section class="card todo">

@@ -1,3 +1,7 @@
+/* ====================
+   General CSS
+   ==================== */
+
 :root {
     --background: #0b0b0b;
 
@@ -46,6 +50,10 @@ p {
     padding: var(--padding);
     box-sizing: border-box;
 }
+
+/* ====================
+   Clock/Weather
+   ==================== */
 
 .clock-weather {
     display: flex;
@@ -109,6 +117,10 @@ p {
     color: var(--muted);
 }
 
+/* ====================
+   Calendar
+   ==================== */
+
 .calendar {
     grid-column: span 6;
     grid-row: span 2;
@@ -120,7 +132,6 @@ p {
 
 .calendar h2 {
     margin-top: 0;
-    margin-bottom: 14px;
     font-size: 1.3rem;
     font-weight: 600;
     letter-spacing: -0.3px;
@@ -172,6 +183,78 @@ p {
 .calendar-day.today .day-number {
     color: var(--text);
 }
+
+.calendar-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 16px;
+
+}
+
+.week-button {
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 1.5rem;
+
+    cursor: pointer;
+
+    padding: 4px 10px;
+
+    border-radius: 8px;
+
+    transition: 0.2s ease;
+
+}
+
+.week-button:hover {
+
+    color: var(--text);
+
+    background: rgba(255, 255, 255, 0.05);
+
+}
+
+#today-button {
+
+    border: none;
+
+    background: rgba(255, 255, 255, 0.05);
+
+    color: var(--muted);
+
+    padding: 6px 12px;
+
+    border-radius: 8px;
+
+    font-size: 0.75rem;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+}
+
+#today-button:hover {
+
+    background: var(--accent-soft);
+
+    color: var(--text);
+
+}
+
+/* ====================
+   Cards
+   ==================== */
 
 .event {
     background: rgba(255, 255, 255, 0.04);
@@ -292,6 +375,11 @@ p {
     border-radius: 999px;
     transition: width 0.5s ease;
 }
+
+/* ====================
+   GitHub
+   ==================== */
+
 .github-layout {
     display: grid;
     grid-template-columns: 0.7fr 1.3fr;
@@ -345,6 +433,10 @@ p {
     font-size: 0.68rem;
     margin-top: 3px;
 }
+
+/* ====================
+   Spotify
+   ==================== */
 
 .spotify-album-art {
     width: 105px;
