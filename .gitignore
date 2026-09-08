@@ -1,3 +1,4 @@
 node_modules/
 .env
 backend/google-token.json
+backend/spotify-token.json

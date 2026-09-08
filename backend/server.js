@@ -9,6 +9,12 @@ const {
     getAuthClient
 } = require("./google-auth");
 
+const {
+    getAuthUrl: getSpotifyAuthUrl,
+    handleCallback: handleSpotifyCallback,
+    getAccessToken
+} = require("./spotify-auth");
+
 const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
@@ -29,6 +35,20 @@ const server = http.createServer(async (req, res) => {
 
         return;
     }
+
+    // Start Spotify authorization
+if (req.url === "/auth/spotify") {
+
+    const authUrl = getSpotifyAuthUrl();
+
+    res.writeHead(302, {
+        Location: authUrl
+    });
+
+    res.end();
+
+    return;
+}
 
 
     // Google OAuth callback
@@ -83,6 +103,62 @@ const server = http.createServer(async (req, res) => {
 
         return;
     }
+
+    // Spotify OAuth callback
+if (req.url.startsWith("/spotify-callback")) {
+
+    const url =
+        new URL(
+            req.url,
+            `http://localhost:${PORT}`
+        );
+
+    const code =
+        url.searchParams.get("code");
+
+    const state =
+        url.searchParams.get("state");
+
+    if (!code) {
+
+        res.writeHead(400, {
+            "Content-Type": "text/plain"
+        });
+
+        res.end("Missing Spotify authorization code.");
+
+        return;
+    }
+
+    try {
+
+        await handleSpotifyCallback(code, state);
+
+        res.writeHead(302, {
+            Location:
+                "http://127.0.0.1:5500/Frontend/dash.html"
+        });
+
+        res.end();
+
+    } catch (error) {
+
+        console.error(
+            "Spotify authorization error:",
+            error
+        );
+
+        res.writeHead(500, {
+            "Content-Type": "text/plain"
+        });
+
+        res.end(
+            "Spotify authorization failed."
+        );
+    }
+
+    return;
+}
 
     // Google Calendar
     if (req.url.startsWith("/api/calendar")) {
@@ -202,6 +278,163 @@ const server = http.createServer(async (req, res) => {
 
         return;
     }
+
+// Spotify Now Playing
+if (req.url === "/api/spotify/now-playing") {
+
+    try {
+
+        const accessToken =
+            await getAccessToken();
+
+        const response = await fetch(
+            "https://api.spotify.com/v1/me/player/currently-playing",
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${accessToken}`
+                }
+            }
+        );
+
+        // Nothing is currently playing
+        if (response.status === 204) {
+
+            res.writeHead(200, {
+                "Content-Type": "application/json"
+            });
+
+            res.end(
+                JSON.stringify({
+                    playing: false
+                })
+            );
+
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                `Spotify API error: ${response.status}`
+            );
+        }
+
+        const data =
+            await response.json();
+
+        const track =
+            data.item;
+
+        const spotifyData = {
+            playing: data.is_playing,
+            title: track?.name || "",
+            artist:
+                track?.artists
+                    ?.map(artist => artist.name)
+                    .join(", ") || "",
+            album:
+                track?.album?.name || "",
+            albumArt:
+                track?.album?.images?.[0]?.url || "",
+            progress:
+                data.progress_ms || 0,
+            duration:
+                track?.duration_ms || 0
+        };
+
+        res.writeHead(200, {
+            "Content-Type": "application/json"
+        });
+
+        res.end(
+            JSON.stringify(spotifyData)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Spotify Now Playing error:",
+            error
+        );
+
+        res.writeHead(500, {
+            "Content-Type": "application/json"
+        });
+
+        res.end(JSON.stringify({
+            error: "Unable to get Spotify playback"
+        }));
+    }
+
+    return;
+}
+
+// Spotify Play / Pause
+if (
+    req.url === "/api/spotify/play" ||
+    req.url === "/api/spotify/pause"
+) {
+
+    try {
+
+        const accessToken =
+            await getAccessToken();
+
+        const action =
+            req.url.endsWith("/play")
+                ? "play"
+                : "pause";
+
+        const response =
+            await fetch(
+                `https://api.spotify.com/v1/me/player/${action}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization:
+                            `Bearer ${accessToken}`
+                    }
+                }
+            );
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            throw new Error(
+                `Spotify ${action} failed: ${response.status} ${errorText}`
+            );
+        }
+
+        res.writeHead(200, {
+            "Content-Type": "application/json"
+        });
+
+        res.end(
+            JSON.stringify({
+                success: true
+            })
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Spotify play/pause error:",
+            error
+        );
+
+        res.writeHead(500, {
+            "Content-Type": "application/json"
+        });
+
+        res.end(JSON.stringify({
+            error: "Unable to control Spotify playback"
+        }));
+    }
+
+    return;
+}
 
     // System stats endpoint
     if (req.url === "/api/system-stats") {
