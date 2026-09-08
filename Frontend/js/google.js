@@ -1,71 +1,4 @@
-const CLIENT_ID = '805508025196-svlk2lq57g80p2u11rtdm5grp9mo2nem.apps.googleusercontent.com';
-
-const SCOPES = [
-    'https://www.googleapis.com/auth/calendar.readonly',
-    'https://www.googleapis.com/auth/tasks.readonly'
-].join(' ');
-
-let tokenClient;
-let gapiInited = false;
-let gisInited = false;
 let currentWeekOffset = 0;
-
-// ====================
-// Google API
-// ====================
-
-function gapiLoaded() {
-    gapi.load('client', initializeGapiClient);
-}
-
-async function initializeGapiClient() {
-    await gapi.client.init({
-        discoveryDocs: [
-            'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-            'https://tasks.googleapis.com/$discovery/rest?version=v1'
-        ]
-    });
-
-    gapiInited = true;
-}
-
-function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: ''
-    });
-
-    gisInited = true;
-}
-
-// ====================
-// Google Authentication
-// ====================
-
-async function handleAuthClick() {
-    tokenClient.callback = async (response) => {
-        if (response.error !== undefined) {
-            throw response;
-        }
-
-        console.log("Google authentication successful");
-
-document.getElementById("google-login").style.display = "none";
-
-await loadCalendar();
-
-console.log("Loading Google Tasks...");
-
-await loadTaskLists();
-
-console.log("Google Tasks finished");
-    };
-
-    tokenClient.requestAccessToken({
-        prompt: 'consent'
-    });
-}
 
 
 // ====================
@@ -82,26 +15,31 @@ async function loadCalendar() {
 
         const difference = day === 0 ? -6 : 1 - day;
 
-        monday.setDate(monday.getDate() + difference + currentWeekOffset * 7);
+        monday.setDate(
+            monday.getDate() +
+            difference +
+            currentWeekOffset * 7
+        );
+
         monday.setHours(0, 0, 0, 0);
 
-        // Find Sunday
+        // Find the following Monday
         const sunday = new Date(monday);
         sunday.setDate(sunday.getDate() + 7);
         sunday.setHours(0, 0, 0, 0);
 
-        const response = await gapi.client.calendar.events.list({
-            calendarId: 'primary',
-            timeMin: monday.toISOString(),
-            timeMax: sunday.toISOString(),
-            showDeleted: false,
-            singleEvents: true,
-            orderBy: 'startTime'
-        });
+        // Ask the Dash backend for Calendar events
+        const response = await fetch(
+            `http://localhost:3000/api/calendar?start=${encodeURIComponent(monday.toISOString())}&end=${encodeURIComponent(sunday.toISOString())}`
+        );
 
-        const events = response.result.items || [];
+        if (!response.ok) {
+            throw new Error("Calendar request failed");
+        }
 
-        console.log("This week's events:", events);
+        const events = await response.json();
+
+        console.log("Calendar events from backend:", events);
 
         displayCalendar(events, monday);
 
@@ -333,65 +271,33 @@ if (todayButton) {
 // ====================
 
 async function loadTaskLists() {
+    console.log("Loading Google Tasks...");
 
-    try {
-
-        console.log("Requesting Google Task lists...");
-
-        const response = await gapi.client.tasks.tasklists.list({
-            maxResults: 100
-        });
-
-        const taskLists = response.result.items || [];
-
-        console.log("Task lists:", taskLists);
-
-        if (taskLists.length === 0) {
-
-            console.log("No task lists found.");
-
-            return;
-        }
-
-        // Use first task list for now
-        const taskListId = taskLists[0].id;
-
-        await loadTasks(taskListId);
-
-    } catch (error) {
-
-        console.error("Tasks error:", error);
-
-    }
+    await loadTasks();
 }
 
-
-async function loadTasks(taskListId) {
-
+async function loadTasks() {
     try {
+        console.log("Requesting Google Tasks from backend...");
 
-        console.log("Requesting tasks...");
+        const response = await fetch(
+            "http://localhost:3000/api/tasks"
+        );
 
-        const response = await gapi.client.tasks.tasks.list({
-            tasklist: taskListId,
-            maxResults: 100,
-            showCompleted: false,
-            showHidden: false
-        });
+        if (!response.ok) {
+            throw new Error("Tasks request failed");
+        }
 
-        const tasks = response.result.items || [];
+        const tasks = await response.json();
 
-        console.log("Tasks:", tasks);
+        console.log("Tasks from backend:", tasks);
 
         displayTasks(tasks);
 
     } catch (error) {
-
         console.error("Task loading error:", error);
-
     }
 }
-
 
 function displayTasks(tasks) {
 
@@ -420,3 +326,8 @@ function displayTasks(tasks) {
 
     });
 }
+// Automatically load Google data from the Dash backend
+window.addEventListener("load", () => {
+    loadCalendar();
+    loadTaskLists();
+});
